@@ -1,4 +1,4 @@
-import java.awt.BasicStroke;
+﻿import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -13,39 +13,28 @@ import java.util.Arrays;
 import java.util.Random;
 import java.util.StringJoiner;
 import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
 import javax.swing.JPanel;
-import javax.swing.JRadioButtonMenuItem;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
 public class TurtleRace {
-    private static final int TRACK_LENGTH = 50;
+    private static final int TRACK_LENGTH = 50
     private static final int DELAY_MS = 200;
     private static final String[] TURTLE_NAMES = {"Speedy", "Shelly", "Turbo"};
     private static final Color[] TURTLE_COLORS = {
             new Color(48, 151, 88), new Color(49, 123, 196), new Color(206, 122, 37)
     };
 
-    private enum Language { HUNGARIAN, ENGLISH }
-    private enum RaceState { READY, STARTING, RUNNING, FINISHED }
-
-    private Language language = Language.HUNGARIAN;
-    private RaceState state = RaceState.READY;
-    private JFrame frame;
     private final Random random = new Random();
     private final int[] positions = new int[TURTLE_NAMES.length];
     private final JComboBox<String> turtleChoice = new JComboBox<>(TURTLE_NAMES);
-    private final JButton startButton = new JButton();
-    private final JLabel choiceLabel = new JLabel();
-    private final JLabel roundLabel = new JLabel();
-    private final JLabel resultLabel = new JLabel();
+    private final JButton startButton = new JButton("Verseny indítása");
+    private final JLabel roundLabel = new JLabel("Kör: 0");
+    private final JLabel resultLabel = new JLabel("Válassz teknőst, majd indítsd el a versenyt!");
     private final RacePanel racePanel = new RacePanel();
     private final Timer timer = new Timer(DELAY_MS, event -> advanceRound());
     private int selectedTurtle;
@@ -55,36 +44,12 @@ public class TurtleRace {
         SwingUtilities.invokeLater(() -> new TurtleRace().showWindow());
     }
 
-    private String text(String hungarian, String english) {
-        return language == Language.HUNGARIAN ? hungarian : english;
-    }
-
-    private JMenuBar createMenuBar() {
-        JMenuBar menuBar = new JMenuBar();
-        JMenu languageMenu = new JMenu("Nyelv / Language");
-        ButtonGroup group = new ButtonGroup();
-        for (Language option : Language.values()) {
-            JRadioButtonMenuItem item = new JRadioButtonMenuItem(
-                    option == Language.HUNGARIAN ? "Magyar" : "English",
-                    option == language);
-            item.addActionListener(event -> {
-                language = option;
-                refreshLabels();
-            });
-            group.add(item);
-            languageMenu.add(item);
-        }
-        menuBar.add(languageMenu);
-        return menuBar;
-    }
-
     private void showWindow() {
-        frame = new JFrame();
+        JFrame frame = new JFrame("Teknősverseny");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setJMenuBar(createMenuBar());
 
         JPanel controls = new JPanel(new FlowLayout(FlowLayout.LEFT, 12, 12));
-        controls.add(choiceLabel);
+        controls.add(new JLabel("Szerinted ki nyer?"));
         controls.add(turtleChoice);
         controls.add(startButton);
         startButton.addActionListener(event -> startRace());
@@ -103,57 +68,10 @@ public class TurtleRace {
                 timer.stop();
             }
         });
-        refreshLabels();
         frame.pack();
         frame.setMinimumSize(frame.getSize());
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-    }
-
-    // Derive every translated label from the current state without changing the race.
-    private void refreshLabels() {
-        if (frame != null) {
-            frame.setTitle(text("Tekn\u0151sverseny", "Turtle Race"));
-        }
-        choiceLabel.setText(text("Szerinted ki nyer?", "Who do you think will win?"));
-        roundLabel.setText(text("K\u00f6r: ", "Round: ") + round);
-        startButton.setText(state == RaceState.FINISHED
-                ? text("\u00daj verseny ind\u00edt\u00e1sa", "Start another race")
-                : text("Verseny ind\u00edt\u00e1sa", "Start race"));
-        String bet = text("Tipped: ", "Your pick: ") + TURTLE_NAMES[selectedTurtle];
-        switch (state) {
-            case READY:
-                resultLabel.setText(text("V\u00e1lassz tekn\u0151st, majd ind\u00edtsd el a versenyt!",
-                        "Choose a turtle, then start the race!"));
-                break;
-            case STARTING:
-                resultLabel.setText(bet + text(". A verseny mindj\u00e1rt indul!",
-                        ". The race is about to start!"));
-                break;
-            case RUNNING:
-                resultLabel.setText(text("Verseny folyamatban. ", "Race in progress. ") + bet);
-                break;
-            case FINISHED:
-                StringJoiner winners = new StringJoiner(", ");
-                int winnerCount = 0;
-                for (int i = 0; i < positions.length; i++) {
-                    if (positions[i] == TRACK_LENGTH) {
-                        winners.add(TURTLE_NAMES[i]);
-                        winnerCount++;
-                    }
-                }
-                String outcome = positions[selectedTurtle] == TRACK_LENGTH
-                        ? text("Nyert\u00e9l!", "You won!")
-                        : text("Most nem nyert\u00e9l.", "You lost this time.");
-                resultLabel.setText((winnerCount > 1
-                        ? text("D\u00f6ntetlen! Gy\u0151ztesek: ", "Tie! Winners: ")
-                        : text("Gy\u0151ztes: ", "Winner: "))
-                        + winners + ". " + bet + ". " + outcome);
-                break;
-            default:
-                throw new IllegalStateException("Unknown race state: " + state);
-        }
-        racePanel.repaint();
     }
 
     private void startRace() {
@@ -163,10 +81,11 @@ public class TurtleRace {
         Arrays.fill(positions, 0);
         round = 0;
         selectedTurtle = turtleChoice.getSelectedIndex();
-        state = RaceState.STARTING;
+        roundLabel.setText("Kör: 0");
+        resultLabel.setText("Tipped: " + TURTLE_NAMES[selectedTurtle] + ". A verseny mindjárt indul!");
         turtleChoice.setEnabled(false);
         startButton.setEnabled(false);
-        refreshLabels();
+        racePanel.repaint();
         timer.setInitialDelay(1500);
         timer.start();
     }
@@ -179,13 +98,31 @@ public class TurtleRace {
             positions[i] = Math.min(TRACK_LENGTH, positions[i] + random.nextInt(6) + 1);
             finished |= positions[i] == TRACK_LENGTH;
         }
-        state = finished ? RaceState.FINISHED : RaceState.RUNNING;
+        roundLabel.setText("Kör: " + round);
+        resultLabel.setText("Verseny folyamatban. Tipped: " + TURTLE_NAMES[selectedTurtle]);
+        racePanel.repaint();
         if (finished) {
             timer.stop();
-            turtleChoice.setEnabled(true);
-            startButton.setEnabled(true);
+            showResult();
         }
-        refreshLabels();
+    }
+
+    private void showResult() {
+        StringJoiner winners = new StringJoiner(", ");
+        int winnerCount = 0;
+        for (int i = 0; i < positions.length; i++) {
+            if (positions[i] == TRACK_LENGTH) {
+                winners.add(TURTLE_NAMES[i]);
+                winnerCount++;
+            }
+        }
+        String outcome = positions[selectedTurtle] == TRACK_LENGTH
+                ? "Nyertél!" : "Most nem nyertél.";
+        resultLabel.setText((winnerCount > 1 ? "Döntetlen! Győztesek: " : "Győztes: ")
+                + winners + ". Tipped: " + TURTLE_NAMES[selectedTurtle] + ". " + outcome);
+        turtleChoice.setEnabled(true);
+        startButton.setText("Új verseny indítása");
+        startButton.setEnabled(true);
     }
 
     private class RacePanel extends JPanel {
@@ -208,8 +145,8 @@ public class TurtleRace {
                 int top = 45;
                 int laneHeight = (getHeight() - top - 15) / TURTLE_NAMES.length;
                 g.setColor(Color.DARK_GRAY);
-                g.drawString(text("RAJT", "START"), startX - 16, 25);
-                g.drawString(text("C\u00c9L", "FINISH"), finishX - 10, 25);
+                g.drawString("RAJT", startX - 16, 25);
+                g.drawString("CÉL", finishX - 10, 25);
 
                 for (int i = 0; i < TURTLE_NAMES.length; i++) {
                     int laneTop = top + i * laneHeight;
