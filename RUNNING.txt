@@ -3,7 +3,7 @@ TEKNOSVERSENY / TURTLE RACE
 Magyar:
 1. Csomagold ki a teljes TurtleRace-Windows.zip fajlt.
 2. Nyisd meg a TurtleRace mappat, es inditsd el a TurtleRace.exe fajlt.
-3. A Nyelv / Language menuben valaszthatsz magyar es angol kozott.
+3. Valassz teknost, majd kattints a Verseny inditasa gombra.
 
 Kulon Java-telepites nem szukseges. Az exe mellett az app es runtime
 mappakra is szukseg van: mindig a teljes TurtleRace mappat masold at.
@@ -12,7 +12,7 @@ Ez egy hordozhato Windows-alkalmazas, nem telepito.
 English:
 1. Extract the entire TurtleRace-Windows.zip archive.
 2. Open the TurtleRace folder and launch TurtleRace.exe.
-3. Select Magyar or English from the Nyelv / Language menu.
+3. Choose a turtle, then click Verseny indítása to start the race.
 
 No separate Java installation is required. Keep the app and runtime
 folders next to the executable; always copy the entire TurtleRace folder.
