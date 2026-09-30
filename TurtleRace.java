@@ -61,7 +61,7 @@ public class TurtleRace {
         status.setBorder(BorderFactory.createEmptyBorder(10, 16, 16, 16));
         status.add(roundLabel);
         status.add(resultLabel);
-        
+
         // Add winner display label with bold font
         winnerLabel.setFont(winnerLabel.getFont().deriveFont(Font.BOLD, 18));
         winnerLabel.setForeground(new Color(25, 118, 42));
@@ -130,15 +130,15 @@ public class TurtleRace {
                 ? "Nyertél!" : "Most nem nyertél.";
         resultLabel.setText((winnerCount > 1 ? "Döntetlen! Győztesek: " : "Győztes: ")
                 + winners + ". Tipped: " + TURTLE_NAMES[selectedTurtle] + ". " + outcome);
-        
+
         // Display winner name prominently
         winnerName = winners.toString();
         if (winnerCount > 1) {
-            winnerLabel.setText("🏆 Győztesek: " + winnerName);
+            winnerLabel.setText("Győztesek: " + winnerName);
         } else {
-            winnerLabel.setText("🏆 Győztes: " + winnerName);
+            winnerLabel.setText("Győztes: " + winnerName);
         }
-        
+
         turtleChoice.setEnabled(true);
         startButton.setText("Új verseny indítása");
         startButton.setEnabled(true);
