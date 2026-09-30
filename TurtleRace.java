@@ -22,7 +22,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
 public class TurtleRace {
-    private static final int TRACK_LENGTH = 50
+    private static final int TRACK_LENGTH = 50;
     private static final int DELAY_MS = 200;
     private static final String[] TURTLE_NAMES = {"Speedy", "Shelly", "Turbo"};
     private static final Color[] TURTLE_COLORS = {
